@@ -1,0 +1,19 @@
+# Configuración con credenciales reales — nunca subir a Git
+src/config/database.local.php
+.env
+
+# Dependencias (si se usa Composer más adelante)
+vendor/
+composer.lock
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+*.log
