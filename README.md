@@ -4,54 +4,74 @@ Plataforma web con login para la pastelería artesanal "La Casa de Mandi". Digit
 
 ## Stack
 
-- **Backend:** PHP
-- **Base de datos:** MySQL
-- **Frontend:** HTML / CSS / JS 
+- **Backend:** Java (Servlets + JSP)
+- **Servidor de aplicaciones:** Apache Tomcat
+- **Base de datos:** MySQL (corriendo vía XAMPP, solo para el motor de base de datos)
+- **Frontend:** HTML / CSS / JavaScript
+- **IDE:** Eclipse (Eclipse IDE for Enterprise Java and Web Developers)
+- **Acceso a datos:** JDBC (driver `mysql-connector-j`)
+
+> Proyecto 100% local — no requiere PHP ni Node.js. La única pieza que XAMPP aporta aquí es MySQL; el servidor web real es Tomcat.
 
 ## Estructura del proyecto
 
 ```
 ProyectoSemestral/
-├── public/                 ← Carpeta raíz del servidor (Document Root)
-│   ├── index.php           ← Punto de entrada de la aplicación
-│   └── assets/
-│       ├── css/
-│       ├── js/
-│       └── img/
+├── WebContent/                    ← Raíz pública del proyecto (lo que sirve Tomcat)
+│   ├── index.jsp                  ← Página de bienvenida
+│   ├── WEB-INF/
+│   │   ├── web.xml                ← Configuración de la app, mapeo de Servlets
+│   │   └── lib/                   ← Aquí va mysql-connector-j.jar (no se sube a Git)
+│   ├── jsp/
+│   │   ├── public/                ← Pantallas sin login (login, registro, catálogo...)
+│   │   ├── cliente/                ← Pantallas del panel de cliente
+│   │   ├── admin/                  ← Pantallas del panel de administración
+│   │   └── layouts/                ← Header, footer, fragmentos reutilizables
+│   ├── css/
+│   ├── js/
+│   └── img/
 ├── src/
-│   ├── config/
-│   │   └── database.php    ← Configuración de conexión a la BD
-│   ├── models/              ← Clases que representan las entidades (Cliente, Pedido, etc.)
-│   ├── controllers/        ← Lógica de cada módulo (login, pedidos, pagos, admin)
-│   └── views/
-│       ├── public/          ← Pantallas sin login (inicio, catálogo, login, registro)
-│       ├── cliente/         ← Pantallas del panel de cliente
-│       ├── admin/           ← Pantallas del panel de administración
-│       └── layouts/         ← Header, footer, plantillas compartidas
+│   └── com/lacasademandi/
+│       ├── modelo/                 ← JavaBeans: Cliente.java, Pedido.java, Producto.java...
+│       ├── dao/                    ← Acceso a datos (JDBC + SQL): ClienteDAO.java...
+│       ├── controlador/            ← Servlets: LoginServlet.java, PedidoServlet.java...
+│       └── util/                   ← ConexionBD.java y utilidades varias
 ├── database/
-│   ├── schema.sql           ← Estructura de las tablas (ejecutar primero)
-│   └── seed.sql             ← Datos de prueba: catálogo real + 8 pedidos de ejemplo
-├── docs/                   ← Copia de la documentación del vault de Obsidian (ver abajo)
+│   ├── schema.sql                  ← Estructura de las tablas (ejecutar primero)
+│   └── seed.sql                    ← Datos de prueba: catálogo real + 8 pedidos de ejemplo
+├── docs/                           ← Copia de la documentación del vault de Obsidian
 ├── .gitignore
 └── README.md
 ```
 
-## Cómo levantar el proyecto localmente
+### Por qué esta estructura
 
-1. Crear la base de datos ejecutando, en este orden:
-   ```bash
-   mysql -u root -p < database/schema.sql
-   mysql -u root -p < database/seed.sql
-   ```
-   O desde phpMyAdmin: pestaña **Importar** → seleccionar `schema.sql` → Continuar, y luego repetir con `seed.sql`.
+Es la estructura estándar que genera Eclipse al crear un **Dynamic Web Project**: `WebContent` es la carpeta pública que Tomcat expone, `WEB-INF` contiene configuración y librerías que NO son accesibles directamente desde el navegador (por seguridad), y `src` es el código Java fuente, separado en tres capas:
 
-2. Revisar `src/config/database.php` y ajustar usuario/contraseña si tu MySQL local no usa `root` sin password. (Caso particular)
+- **modelo** → clases que solo representan datos (getters/setters), sin lógica de base de datos.
+- **dao** → clases que sí hablan con MySQL (usando JDBC), una por entidad. Los Servlets nunca escriben SQL directamente, siempre pasan por su DAO correspondiente.
+- **controlador** → los Servlets, que reciben la petición HTTP, llaman al DAO, y decide qué JSP mostrar.
 
-3. Levantar el servidor de PHP integrado desde la raíz del proyecto:
-   ```bash
-   php -S localhost:8000 -t public
-   ```
-   Y abrir `http://localhost:8000` en el navegador. (O tu ruta normal de trabajo con XAMMP)
+Ya hay un ejemplo completo de punta a punta siguiendo este patrón: `Cliente.java` (modelo) → `ClienteDAO.java` (dao) → `LoginServlet.java` (controlador) → `login.jsp` (vista). Cualquier módulo nuevo debe seguir esta misma cadena.
+
+## Cómo importar el proyecto en Eclipse
+
+1. Abrir Eclipse → **File → Import → Git → Projects from Git** (o clonar primero con `git clone` desde la terminal y luego **Import → Existing Projects into Workspace**).
+2. Confirmar que Eclipse lo reconozca como **Dynamic Web Project**. Si no lo detecta automáticamente, click derecho sobre el proyecto → **Properties → Project Facets** → habilitar "Dynamic Web Module" y apuntar el Content Directory a `WebContent`.
+3. Asociar el proyecto a tu instalación de Tomcat: click derecho → **Properties → Targeted Runtimes** → seleccionar tu versión de Tomcat.
+4. Descargar el conector JDBC de MySQL (`mysql-connector-j-X.X.X.jar`) desde [dev.mysql.com/downloads/connector/j](https://dev.mysql.com/downloads/connector/j/) y copiarlo dentro de `WebContent/WEB-INF/lib/` (esa carpeta está en `.gitignore`, así que cada quien debe colocar el suyo).
+5. Click derecho sobre el proyecto → **Run As → Run on Server** → elegir Tomcat.
+
+## Cómo levantar la base de datos
+
+```bash
+mysql -u root -p < database/schema.sql
+mysql -u root -p < database/seed.sql
+```
+
+O desde phpMyAdmin (el que trae XAMPP): pestaña **Importar** → seleccionar `schema.sql` → Continuar, y repetir con `seed.sql`.
+
+Revisar `src/com/lacasademandi/util/ConexionBD.java` y ajustar usuario/password si tu MySQL local no usa `root` sin contraseña (configuración por defecto de XAMPP).
 
 ### Cuentas de prueba (vienen en el seed)
 
@@ -64,6 +84,8 @@ ProyectoSemestral/
 | Cliente | daniela.castillo@gmail.com / 6000-0005 | cliente123 |
 
 No hay cuenta de administrador en el seed — se crea aparte directamente en la tabla `Administrador` cuando se necesite probar el panel admin.
+
+> Nota técnica: el password de estos clientes está guardado como hash BCrypt real. El `LoginServlet` de ejemplo todavía compara el password en texto plano (marcado con `TODO` en el código) porque falta agregar una librería de BCrypt para Java (ej. `jBCrypt`) al proyecto — agregar ese `.jar` a `WEB-INF/lib` antes de validar contraseñas reales.
 
 ## Documentación completa del proyecto
 
@@ -102,8 +124,9 @@ Orden recomendado de integración: `auth-onboarding` primero, porque las demás 
 ### Primera vez (clonar el repositorio)
 
 ```bash
-git clone <url-del-repositorio>
-cd ProyectoSemestral
+git clone https://github.com/MarianC-programing/La-Casa-de-mandi.git
+cd La-Casa-de-mandi
+git checkout feature/<tu-rama>
 ```
 
 ### Flujo de trabajo diario
@@ -113,11 +136,7 @@ cd ProyectoSemestral
    git pull origin main
    ```
 
-2. Crear una rama para lo que vayas a hacer (no trabajar directo sobre `main`):
-   ```bash
-   git checkout -b feature/nombre-del-modulo
-   ```
-   Ejemplos: `feature/login`, `feature/catalogo`, `feature/dashboard-admin`
+2. Trabajar siempre dentro de tu rama asignada, no directo sobre `main`.
 
 3. Guardar avances con mensajes claros y en español, describiendo qué se hizo:
    ```bash

@@ -1,10 +1,16 @@
-# Configuración con credenciales reales — nunca subir a Git
-src/config/database.local.php
-.env
+# Driver JDBC de MySQL — cada quien lo coloca localmente en WebContent/WEB-INF/lib
+# Descargar de: https://dev.mysql.com/downloads/connector/j/
+WebContent/WEB-INF/lib/*.jar
 
-# Dependencias (si se usa Composer más adelante)
-vendor/
-composer.lock
+# Carpeta de clases compiladas que genera Eclipse — no se versiona
+build/
+WebContent/WEB-INF/classes/
+
+# Configuración local específica de Eclipse (cada quien tiene la suya)
+.settings/
+.project
+.classpath
+.metadata/
 
 # Archivos del sistema operativo
 .DS_Store
@@ -13,7 +19,6 @@ Thumbs.db
 # Archivos de IDE
 .vscode/
 .idea/
-*.code-workspace
 
 # Logs
 *.log
