@@ -6,8 +6,7 @@ Plataforma web con login para la pastelería artesanal "La Casa de Mandi". Digit
 
 - **Backend:** PHP
 - **Base de datos:** MySQL
-- **Frontend:** HTML / CSS / JS (sin framework de frontend pesado)
-- **Wireframes:** Google Stitch
+- **Frontend:** HTML / CSS / JS 
 
 ## Estructura del proyecto
 
@@ -32,6 +31,7 @@ ProyectoSemestral/
 ├── database/
 │   ├── schema.sql           ← Estructura de las tablas (ejecutar primero)
 │   └── seed.sql             ← Datos de prueba: catálogo real + 8 pedidos de ejemplo
+├── docs/                   ← Copia de la documentación del vault de Obsidian (ver abajo)
 ├── .gitignore
 └── README.md
 ```
@@ -45,13 +45,13 @@ ProyectoSemestral/
    ```
    O desde phpMyAdmin: pestaña **Importar** → seleccionar `schema.sql` → Continuar, y luego repetir con `seed.sql`.
 
-2. Revisar `src/config/database.php` y ajustar usuario/contraseña si tu MySQL local no usa `root` sin password.
+2. Revisar `src/config/database.php` y ajustar usuario/contraseña si tu MySQL local no usa `root` sin password. (Caso particular)
 
 3. Levantar el servidor de PHP integrado desde la raíz del proyecto:
    ```bash
    php -S localhost:8000 -t public
    ```
-   Y abrir `http://localhost:8000` en el navegador.
+   Y abrir `http://localhost:8000` en el navegador. (O tu ruta normal de trabajo con XAMMP)
 
 ### Cuentas de prueba (vienen en el seed)
 
@@ -67,24 +67,35 @@ No hay cuenta de administrador en el seed — se crea aparte directamente en la 
 
 ## Documentación completa del proyecto
 
-Toda la documentación funcional, de diseño y de base de datos vive en el vault de Obsidian, en:
+La documentación funcional, de diseño y de base de datos se mantiene en el vault de Obsidian, y una copia vive también en este repositorio dentro de la carpeta `docs/` para que todo el equipo tenga acceso sin necesitar Obsidian instalado.
 
-```
-MyObsidianValue/Marian_s vault/Proyectos/Programacion2/
-```
+> Nota: estos archivos usan la sintaxis de enlaces de Obsidian (`[[Nombre del documento]]`). En GitHub se ven como texto plano, no como links clicables — es normal, solo funcionan así dentro de Obsidian.
 
 | Documento | Qué contiene |
 |---|---|
-| `Proyecto Semestral La Casa de Mandi.md` | Resumen general, tareas, decisiones tomadas |
-| `Vision del Proyecto.md` | Problema del negocio y objetivo de la solución |
-| `Requisitos Funcionales.md` | Todos los RF del sistema, módulo por módulo |
-| `Modelo de Datos.md` | Entidades, atributos, relaciones y flujo de estados del pedido |
-| `Mapa del Sitio.md` | Árbol de navegación de las tres zonas (pública, cliente, admin) |
-| `Wireframes.md` | Estructura de cada pantalla |
-| `Reglas de Desarrollo.md` | Reglas de originalidad y buenas prácticas del proyecto |
-| `Script Base de Datos.md` | Explicación del `schema.sql` y `seed.sql`, qué prueba cada pedido del seed |
+| `docs/Proyecto Semestral La Casa de Mandi.md` | Resumen general, tareas, decisiones tomadas |
+| `docs/Vision del Proyecto.md` | Problema del negocio y objetivo de la solución |
+| `docs/Requisitos Funcionales.md` | Todos los RF del sistema, módulo por módulo |
+| `docs/Modelo de Datos.md` | Entidades, atributos, relaciones y flujo de estados del pedido |
+| `docs/Mapa del Sitio.md` | Árbol de navegación de las tres zonas (pública, cliente, admin) |
+| `docs/Wireframes.md` | Estructura de cada pantalla |
+| `docs/Reglas de Desarrollo.md` | Reglas de originalidad y buenas prácticas del proyecto |
+| `docs/Script Base de Datos.md` | Explicación del `schema.sql` y `seed.sql`, qué prueba cada pedido del seed |
 
-Antes de tocar código en un módulo nuevo, revisar primero el documento correspondiente en Obsidian — ahí están las decisiones ya tomadas (por ejemplo, por qué el precio de los dulces lo ajusta el admin y el de postres se calcula solo, o por qué los pagos necesitan confirmación manual antes de cambiar el estado del pedido).
+Antes de tocar código en un módulo nuevo, revisar primero el documento correspondiente en `docs/` — ahí están las decisiones ya tomadas (por ejemplo, por qué el precio de los dulces lo ajusta el admin y el de postres se calcula solo, o por qué los pagos necesitan confirmación manual antes de cambiar el estado del pedido).
+
+Si se actualiza un documento en el vault de Obsidian, hay que recordar copiar el archivo actualizado a `docs/` y subirlo en un commit (`docs/...`) para que el resto del equipo vea la versión más reciente.
+
+## Equipo y división de trabajo
+
+| Rama | Responsable | Alcance |
+|---|---|---|
+| `feature/admin-panel` | Marian | Dashboard, gestión de pedidos (cambio de estado, confirmación de pagos), gestión de productos/variantes, gestión de clientes, capacidad de entregas, reportes |
+| `feature/auth-onboarding` | Laura | Login con redirección por rol, Registro de clientes, Mi Perfil |
+| `feature/catalogo-publico` | Evelin | Inicio, Catálogo por categoría (Dulces/Postres), Detalle del Producto |
+| `feature/pedidos-pagos-cliente` | Gabriela | Formulario de Nuevo Pedido, Mis Pedidos, Detalle del Pedido, Formulario de Abono, Formulario de Pago Final |
+
+Orden recomendado de integración: `auth-onboarding` primero, porque las demás ramas necesitan un login funcional para probar pantallas con sesión activa.
 
 ## Cómo trabajar con Git
 

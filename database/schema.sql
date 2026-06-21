@@ -1,7 +1,6 @@
 -- ============================================================
 -- LA CASA DE MANDI — Esquema de Base de Datos
 -- Proyecto Semestral Programación 2
--- Motor: MySQL (compatible con phpMyAdmin / MyPHP)
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS la_casa_de_mandi
