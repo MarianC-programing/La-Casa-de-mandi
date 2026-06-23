@@ -1,6 +1,8 @@
 package com.lacasademandi.controlador;
 
+import com.lacasademandi.dao.AdministradorDAO;
 import com.lacasademandi.dao.ClienteDAO;
+import com.lacasademandi.modelo.Administrador;
 import com.lacasademandi.modelo.Cliente;
 
 import javax.servlet.ServletException;
@@ -13,51 +15,96 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Servlet de EJEMPLO para el login de clientes.
- * Este es el patrón a seguir para los demás Servlets del proyecto:
- * recibe la petición, llama al DAO correspondiente, decide a qué JSP
- * reenviar (forward) o redirigir (redirect).
+ * Servlet de login — maneja clientes y administrador en un solo flujo.
  *
- * Mapeado a la URL /login (ver web.xml o la anotación @WebServlet abajo).
+ * Flujo:
+ *  1. GET  /login → muestra login.jsp
+ *  2. POST /login → valida credenciales
+ *      - Si es admin (correo en tabla Administrador) → sesion "admin" → dashboard admin
+ *      - Si es cliente (correo o whatsapp en tabla Cliente) → sesion "cliente" → mis-pedidos
+ *      - Si no coincide → vuelve al login con mensaje de error
  *
- * IMPORTANTE: este ejemplo todavía no valida el password contra un hash real
- * (eso requiere agregar una librería de BCrypt para Java, ej. jBCrypt).
- * Por ahora deja el flujo general listo para completar esa parte.
+ * Validación de contraseña: usa jBCrypt (BCrypt.checkpw).
+ * Agregar el .jar de jBCrypt a WebContent/WEB-INF/lib antes de compilar.
+ * Descarga: https://github.com/jeremyh/jBCrypt/releases
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    private final AdministradorDAO adminDAO = new AdministradorDAO();
     private final ClienteDAO clienteDAO = new ClienteDAO();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        // Muestra el formulario de login
-        request.getRequestDispatcher("/jsp/public/login.jsp").forward(request, response);
+
+        // Si ya hay sesión activa, redirigir sin mostrar el login
+        if (req.getSession(false) != null) {
+            HttpSession s = req.getSession(false);
+            if (s.getAttribute("admin") != null) {
+                res.sendRedirect(req.getContextPath() + "/jsp/admin/dashboard.jsp");
+                return;
+            }
+            if (s.getAttribute("cliente") != null) {
+                res.sendRedirect(req.getContextPath() + "/jsp/cliente/mis-pedidos.jsp");
+                return;
+            }
+        }
+
+        req.getRequestDispatcher("/jsp/public/login.jsp").forward(req, res);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
-        String identificador = request.getParameter("identificador"); // correo o whatsapp
-        String password = request.getParameter("password");
+        req.setCharacterEncoding("UTF-8");
+
+        String identificador = req.getParameter("identificador");
+        String password      = req.getParameter("password");
+
+        // Validación básica de campos vacíos
+        if (identificador == null || identificador.isBlank()
+                || password == null || password.isBlank()) {
+            req.setAttribute("error", "Por favor completa todos los campos.");
+            req.getRequestDispatcher("/jsp/public/login.jsp").forward(req, res);
+            return;
+        }
+
+        identificador = identificador.trim();
 
         try {
+            // ── 1. Verificar si es administrador (solo por correo) ──────────────
+            Administrador admin = adminDAO.buscarPorCorreo(identificador);
+
+            if (admin != null && BCrypt.checkpw(password, admin.getPassword())) {
+                HttpSession sesion = req.getSession();
+                sesion.setAttribute("admin", admin);
+                sesion.setMaxInactiveInterval(60 * 60); // 1 hora
+                res.sendRedirect(req.getContextPath() + "/jsp/admin/dashboard.jsp");
+                return;
+            }
+
+            // ── 2. Verificar si es cliente (correo o whatsapp) ─────────────────
             Cliente cliente = clienteDAO.buscarPorCorreoOWhatsapp(identificador);
 
-            // TODO: reemplazar esta comparación directa por BCrypt.checkpw(password, cliente.getPassword())
-            if (cliente != null && cliente.getPassword().equals(password)) {
-                HttpSession sesion = request.getSession();
+            if (cliente != null && BCrypt.checkpw(password, cliente.getPassword())) {
+                HttpSession sesion = req.getSession();
                 sesion.setAttribute("cliente", cliente);
-                response.sendRedirect("jsp/cliente/mis-pedidos.jsp");
-            } else {
-                request.setAttribute("error", "Correo/WhatsApp o contraseña incorrectos.");
-                request.getRequestDispatcher("/jsp/public/login.jsp").forward(request, response);
+                sesion.setMaxInactiveInterval(60 * 60); // 1 hora
+                res.sendRedirect(req.getContextPath() + "/jsp/cliente/mis-pedidos.jsp");
+                return;
             }
+
+            // ── 3. Credenciales incorrectas ────────────────────────────────────
+            req.setAttribute("error", "Correo, WhatsApp o contraseña incorrectos.");
+            req.setAttribute("identificador", identificador); // conservar el campo
+            req.getRequestDispatcher("/jsp/public/login.jsp").forward(req, res);
+
         } catch (SQLException e) {
-            throw new ServletException("Error al consultar la base de datos", e);
+            throw new ServletException("Error al consultar la base de datos durante el login.", e);
         }
     }
 }

@@ -7,25 +7,43 @@
 
     <display-name>La Casa de Mandi</display-name>
 
-    <!-- Página que se muestra al entrar a la raíz del proyecto -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- ── Login ── -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.lacasademandi.controlador.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <!-- ── Registro ── -->
+    <servlet>
+        <servlet-name>RegistroServlet</servlet-name>
+        <servlet-class>com.lacasademandi.controlador.RegistroServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegistroServlet</servlet-name>
+        <url-pattern>/registro</url-pattern>
+    </servlet-mapping>
+
+    <!-- ── Logout ── -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.lacasademandi.controlador.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
     <!--
-        A medida que se creen los Servlets (LoginServlet, PedidoServlet, etc.)
-        se registran aquí con su <servlet> y <servlet-mapping> correspondiente.
-
-        Ejemplo de cómo se vería al agregar el primero (login):
-
-        <servlet>
-            <servlet-name>LoginServlet</servlet-name>
-            <servlet-class>com.lacasademandi.controlador.LoginServlet</servlet-class>
-        </servlet>
-        <servlet-mapping>
-            <servlet-name>LoginServlet</servlet-name>
-            <url-pattern>/login</url-pattern>
-        </servlet-mapping>
+        Próximos Servlets a agregar: /pedido, /catalogo, /admin/pedidos
+        Seguir el mismo patrón: servlet + servlet-mapping
     -->
 
 </web-app>

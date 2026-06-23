@@ -158,4 +158,16 @@ Definir los requisitos funcionales antes de codificar evita retrabajos y garanti
 
 ---
 
+### RF08 — Página de Inicio (pública)
+
+- Header con navegación: Inicio, Catálogo, Sobre Nosotros, Contacto, botón "Acceder"
+- Sin icono de carrito (el sistema no maneja carrito de compras)
+- Hero principal con frase del negocio y dos botones: "Ordenar Ahora" (redirige a Catálogo o Login) y "Ver Catálogo"
+- Sección "Dulces y Postres Destacados": 3 productos reales del catálogo (no placeholders), tomados de la tabla `Producto`/`Producto_Variante`
+- Sección "Noticias y Novedades": bloque de contenido editorial con 3 artículos/historias del negocio (requisito solicitado por el profesor) — contenido estático, no requiere tabla en base de datos por ahora
+- Sección "¿Cómo hacer tu pedido?": proceso visual de 4 pasos — Elige → Confirma → Abona → Disfruta (requisito solicitado por el profesor), refleja de forma simplificada el flujo real de estados del pedido
+- Footer con datos de contacto, redes sociales y enlaces legales
+
+---
+
 *← [[­HOME]] | [[MOC — Proyectos]]*
