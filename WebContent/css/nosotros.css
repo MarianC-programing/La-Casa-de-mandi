@@ -1,0 +1,136 @@
+/* ============================================================
+   SOBRE NOSOTROS — estilos específicos
+   ============================================================ */
+
+/* Historia */
+.nosotros-historia {
+    text-align: center;
+    padding: 4rem var(--space-8) 3rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.nosotros-historia h1 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.nosotros-divisor {
+    width: 60px;
+    border: none;
+    border-top: 2px solid var(--secondary);
+    margin: 0 auto 1.5rem;
+}
+
+.nosotros-historia p {
+    font-size: 16px;
+    color: var(--on-surface-variant);
+    line-height: 28px;
+}
+
+/* Sección del equipo */
+.nosotros-equipo {
+    background-color: var(--surface-container-low);
+    padding: 4rem var(--space-8);
+    text-align: center;
+}
+
+.nosotros-equipo h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.nosotros-equipo__subtitulo {
+    color: var(--on-surface-variant);
+    margin-bottom: 3rem;
+}
+
+/* Grid del equipo */
+.equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: var(--container-max);
+    margin: 0 auto;
+}
+
+/* Tarjeta de miembro */
+.tarjeta-miembro {
+    text-align: center;
+}
+
+.tarjeta-miembro__foto {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+    background-color: var(--surface-container-high);
+}
+
+.tarjeta-miembro__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+}
+
+.tarjeta-miembro__carrera {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--secondary);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.tarjeta-miembro__nombre {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin: 0 0 0.25rem;
+}
+
+.tarjeta-miembro__cedula {
+    display: block;
+    font-size: 12px;
+    color: var(--outline);
+    margin-bottom: 0.75rem;
+}
+
+.tarjeta-miembro__desc {
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    line-height: 20px;
+}
+
+/* CTA final */
+.nosotros-cta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem var(--space-8);
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.nosotros-cta__texto h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.nosotros-cta__texto p {
+    color: var(--on-surface-variant);
+    font-size: 15px;
+}
+
+.nosotros-cta__botones {
+    display: flex;
+    gap: 1rem;
+    flex-shrink: 0;
+}
