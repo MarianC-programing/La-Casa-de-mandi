@@ -1,0 +1,24 @@
+# Clases compiladas - generadas automáticamente, nunca van en Git
+build/
+target/
+*.class
+
+# JARs de dependencias - cada quien pone el suyo en WEB-INF/lib
+src/main/webapp/WEB-INF/lib/*.jar
+!src/main/webapp/WEB-INF/lib/jbcrypt-0.4.jar
+
+# Archivos de Eclipse - configuración local del IDE
+.classpath
+.project
+.settings/
+.factorypath
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Wireframes (imágenes de diseño, no son código)
+src/main/webapp/wireframes/

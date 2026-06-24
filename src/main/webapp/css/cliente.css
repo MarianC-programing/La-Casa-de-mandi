@@ -1,0 +1,63 @@
+/* ZONA CLIENTE */
+.badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: var(--radius-full); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.badge--pendiente  { background: #e8e8e8; color: #555; }
+.badge--aceptado   { background: #dbeafe; color: #1d4ed8; }
+.badge--produccion { background: #fed7aa; color: #9a3412; }
+.badge--listo      { background: #d1fae5; color: #065f46; }
+.badge--entregado  { background: #a7f3d0; color: #064e3b; }
+.badge--rechazado  { background: #fee2e2; color: #991b1b; }
+.badge--cancelado  { background: #f3f4f6; color: #6b7280; }
+.cliente-wrapper { max-width: 1100px; margin: 0 auto; padding: 2.5rem var(--space-8) 4rem; }
+.cliente-titulo { font-family: var(--font-display); font-size: 40px; font-weight: 700; margin-bottom: 0.4rem; }
+.cliente-subtitulo { color: var(--on-surface-variant); font-size: 15px; margin-bottom: 2rem; }
+
+/* Mis Pedidos */
+.pedidos-filtros { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.pedidos-busqueda { display: flex; align-items: center; gap: 0.5rem; background: #fff; border: 1px solid var(--outline-variant); border-radius: var(--radius-full); padding: 0.5rem 1rem; width: 320px; }
+.pedidos-busqueda input { border: none; outline: none; font-size: 14px; width: 100%; font-family: var(--font-body); }
+.pedidos-tabs { display: flex; gap: 0.5rem; }
+.pedidos-lista { display: flex; flex-direction: column; gap: 1rem; }
+.pedido-fila { display: flex; align-items: center; gap: 1.25rem; background: #fff; border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); padding: 1.25rem; }
+.pedido-fila__img { width: 64px; height: 64px; flex-shrink: 0; border-radius: var(--radius); }
+.pedido-fila__info { flex: 1; }
+.pedido-fila__nombre { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin: 0.25rem 0 0.2rem; }
+.pedido-fila__fecha { font-size: 13px; color: var(--outline); }
+.pedido-fila__total { text-align: right; }
+.pedidos-vacio { text-align: center; padding: 3rem; color: var(--on-surface-variant); }
+
+/* Detalle pedido */
+.detalle-pedido-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+.detalle-pedido-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+.detalle-pedido-main { display: flex; flex-direction: column; gap: 1.5rem; }
+.detalle-pedido-lateral { display: flex; flex-direction: column; gap: 1.5rem; }
+.card { background: #fff; border: 1px solid var(--outline-variant); border-radius: var(--radius-lg); padding: 1.5rem; }
+.card__titulo { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin-bottom: 1.25rem; }
+.estado-timeline { display: flex; align-items: center; }
+.timeline-paso { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.timeline-circulo { width: 36px; height: 36px; border-radius: 50%; background: var(--surface-container-high); border: 2px solid var(--outline-variant); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--outline); }
+.timeline-paso.activo .timeline-circulo { background: var(--secondary); border-color: var(--secondary); color: #fff; }
+.timeline-paso.completo .timeline-circulo { background: #d1fae5; border-color: #065f46; color: #065f46; }
+.timeline-paso span { font-size: 11px; color: var(--outline); text-align: center; }
+.timeline-linea { flex: 1; height: 2px; background: var(--outline-variant); }
+.timeline-linea.completa { background: #065f46; }
+.pagos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.pago-card { background: var(--surface-container-low); border: 1px solid var(--outline-variant); border-radius: var(--radius); padding: 1rem; }
+.pago-card--inactivo { opacity: 0.6; }
+.pago-card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.pago-card__monto { font-family: var(--font-display); font-size: 24px; font-weight: 700; display: block; margin: 0.25rem 0; }
+.pedido-producto-item { display: flex; align-items: center; gap: 1rem; }
+.pedido-producto-img { width: 64px; height: 64px; flex-shrink: 0; }
+.entrega-fila { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+.entrega-fila p { font-size: 14px; color: var(--on-surface-variant); margin-top: 0.2rem; }
+.total-fila { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 0.75rem; color: var(--on-surface-variant); }
+.total-fila--total { border-top: 1px solid var(--outline-variant); padding-top: 0.75rem; margin-top: 0.25rem; font-size: 16px; color: var(--on-surface); }
+
+/* Registrar Abono */
+.abono-grid { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; }
+.abono-resumen { display: flex; gap: 2rem; background: var(--surface-container-high); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+.abono-resumen__label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--outline); text-transform: uppercase; margin-bottom: 0.4rem; }
+.abono-resumen__monto { font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+.abono-resumen__monto--rojo { color: var(--secondary); }
+.abono-aviso { display: flex; gap: 0.75rem; background: var(--surface-container-low); border: 1px solid var(--outline-variant); border-radius: var(--radius); padding: 1rem; font-size: 13px; color: var(--on-surface-variant); line-height: 20px; margin-bottom: 1.25rem; }
+.abono-lateral { display: flex; flex-direction: column; gap: 1rem; }
+.abono-lateral__img { background-color: var(--surface-container-high); }
